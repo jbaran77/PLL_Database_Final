@@ -1,38 +1,41 @@
 -- Create tables
+
 CREATE TABLE Team (
-    Name VARCHAR(100) PRIMARY KEY,
-    City VARCHAR(100),
-    Head_Coach VARCHAR(100),
-    Wins INT,
-    Losses INT
+    Name VARCHAR2(100) PRIMARY KEY,
+    City VARCHAR2(100),
+    Head_Coach VARCHAR2(100),
+    Wins number,
+    Losses number
 );
 
 CREATE TABLE Player (
-    Player_ID INT PRIMARY KEY,
-    Name VARCHAR(100),
-    Team_Name VARCHAR(100) FOREIGN KEY REFERENCES Team(Name),
-    Number INT,
-    Position VARCHAR(50),
-    Goals INT,
-    Assists INT,
-    Salary DECIMAL(10, 2),
-    Gear_Name VARCHAR(100)
+    Player_ID number PRIMARY KEY,
+    Name VARCHAR2(100),
+    Team_Name VARCHAR2(100) ,
+    Jersey_number number,
+    Position VARCHAR2(50),
+    Goals number,
+    Assists number,
+    Salary decimal(10, 2),
+    Gear_Name VARCHAR2(100),
+    FOREIGN KEY (Team_Name) REFERENCES Team(Name)
 );
 
 CREATE TABLE Sponsors (
-    Team_Name VARCHAR(100) FOREIGN KEY REFERENCES Team(Name),
-    Sponsor_Name VARCHAR(100),
-    PRIMARY KEY (Team_Name, Sponsor_Name)
+    Team_Name VARCHAR2(100),
+    Sponsor_Name VARCHAR2(100),
+    PRIMARY KEY (Team_Name, Sponsor_Name),
+    FOREIGN KEY (Team_Name) REFERENCES Team(Name)
 );
 
 CREATE TABLE Gear_Company (
     Name VARCHAR(100) PRIMARY KEY,
-    Years_on_Deal INT
+    Years_on_Deal number
 );
 
 CREATE TABLE Sponsor_Company (
-    Name VARCHAR(100) PRIMARY KEY,
-    Years_on_Deal INT
+    Name VARCHAR2(100) PRIMARY KEY,
+    Years_on_Deal number
 );
 
 -- Constraints
