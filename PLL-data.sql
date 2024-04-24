@@ -2,10 +2,10 @@ INSERT INTO team VALUES ('Waterdogs', 'Philidelphia', 'Bill Tierney', 0, 0);
 INSERT INTO team VALUES ('Cannons', 'Boston', 'Brian Holman', 0, 0);
 INSERT INTO team VALUES ('Whipsnakes', 'Maryland','	Jim Stagnitta', 0, 0);
 INSERT INTO team VALUES ('Atlas', 'New York', 'Mike Pressler', 0, 0);
-INSERT INTO team VALUES ('California', 'Redwoods', 'Nat St. Laurent', 0, 0);
-INSERT INTO team VALUES ('Carolina', 'Chaos', 'Andy Towers', 0, 0);
-INSERT INTO team VALUES ('Denver', 'Outlaws', 'Tim Soudan', 0, 0);
-INSERT INTO team VALUES ('Utah', 'Archers', 'Chris Bates', 0, 0);
+INSERT INTO team VALUES ('Redwoods', 'California', 'Nat St. Laurent', 0, 0);
+INSERT INTO team VALUES ('Chaos', 'Carolina', 'Andy Towers', 0, 0);
+INSERT INTO team VALUES ('Outlaws', 'Denver', 'Tim Soudan', 0, 0);
+INSERT INTO team VALUES ('Archers', 'Utah', 'Chris Bates', 0, 0);
 
 /* Waterdogs Starters */
 INSERT INTO player VALUES (1, 'Kieran McArdle', 'Waterdogs', 6, 'Attack', 20, 12, 52500, 'STX');
