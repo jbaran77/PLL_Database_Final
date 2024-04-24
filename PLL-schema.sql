@@ -1,62 +1,104 @@
--- Create tables
+/*
+DROP TABLE TEAM Cascade Constraints;
+
+DROP TABLE PLAYER Cascade Constraints;
+
+DROP TABLE SPONSORS;
+
+DROP TABLE GEAR_COMPANY;
+
+DROP TABLE SPONSOR_COMPANY;
+*/
 
 CREATE TABLE Team (
-    Name VARCHAR2(100) PRIMARY KEY,
-    City VARCHAR2(100),
-    Head_Coach VARCHAR2(100),
+    name varchar2(40) ,
+    City VARCHAR2(40),
+    Head_Coach VARCHAR2(40),
     Wins number,
-    Losses number
+    Losses number,
+    PRIMARY KEY (name)
 );
 
-CREATE TABLE Player (
-    Player_ID number PRIMARY KEY,
-    Name VARCHAR2(100),
-    Team_Name VARCHAR2(100) ,
-    Jersey_number number,
-    Position VARCHAR2(50),
-    Goals number,
-    Assists number,
-    Salary decimal(10, 2),
-    Gear_Name VARCHAR2(100),
-    FOREIGN KEY (Team_Name) REFERENCES Team(Name)
+
+CREATE TABLE Sponsor_Company (
+    Name VARCHAR2(40),
+    Years_on_Deal number,
+    PRIMARY KEY (name)
 );
+
 
 CREATE TABLE Sponsors (
-    Team_Name VARCHAR2(100),
-    Sponsor_Name VARCHAR2(100),
+    Team_Name VARCHAR2(40),
+    Sponsor_Name VARCHAR2(40),
     PRIMARY KEY (Team_Name, Sponsor_Name),
     FOREIGN KEY (Team_Name) REFERENCES Team(Name)
 );
 
+
+
 CREATE TABLE Gear_Company (
-    Name VARCHAR(100) PRIMARY KEY,
-    Years_on_Deal number
+    Name VARCHAR(40),
+    Years_on_Deal number,
+    PRIMARY KEY (name)
 );
 
-CREATE TABLE Sponsor_Company (
-    Name VARCHAR2(100) PRIMARY KEY,
-    Years_on_Deal number
+
+CREATE TABLE Player (
+    Player_ID number,
+    Name VARCHAR2(40),
+    Team_Name VARCHAR2(40) ,
+    Jersey_number number,
+    Position VARCHAR2(40),
+    Goals number,
+    Assists number,
+    Salary decimal(10, 2),
+    Gear_Name VARCHAR2(40),
+    FOREIGN KEY (Team_Name) REFERENCES Team(Name),
+    FOREIGN KEY (Gear_Name) REFERENCES GEAR_COMPANY(Name)
 );
 
--- Constraints
--- Each player plays for 1 team
-ALTER TABLE Player ADD CONSTRAINT fk_player_team FOREIGN KEY (Team_Name) REFERENCES Team(Name);
 
--- Each team can have a max of 11 players
-ALTER TABLE Team ADD CONSTRAINT team_player_count CHECK (
-    (SELECT COUNT(*) FROM Player WHERE Team_Name = Name) <= 11
-);
 
--- A player can have multiple sponsorships
--- This is allowed by the schema design
+ALTER TABLE PLAYER
+    Add Constraint salary_min Check ( salary >= 25000 );
 
--- Each team has a salary cap of $735,000
-ALTER TABLE Team ADD CONSTRAINT team_salary_cap CHECK (
-    (SELECT SUM(Salary) FROM Player WHERE Team_Name = Name) <= 735000
-);
 
--- Minimum salary for a player is $25,000
-ALTER TABLE Player ADD CONSTRAINT player_min_salary CHECK (Salary >= 25000);
+CREATE OR REPLACE TRIGGER check_salary_cap
+BEFORE INSERT OR UPDATE ON Player
+FOR EACH ROW
+DECLARE
+    check_salary_cap NUMBER;
+BEGIN
+    SELECT SUM(p.salary)
+    INTO check_salary_cap
+    FROM PLAYER p, Team t
+    WHERE p.Team_name = t.name;
 
--- Each team can only have 1 of each number
-ALTER TABLE Player ADD CONSTRAINT unique_number_per_team UNIQUE (Team_Name, Number);
+    IF check_salary_cap >= 735000 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Team cannot go over salary cap.');
+    END IF;
+END;
+/
+
+
+CREATE OR REPLACE TRIGGER check_player_count
+BEFORE INSERT OR UPDATE ON PLAYER
+FOR EACH ROW
+DECLARE
+    v_player_count NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_player_count
+    FROM PLAYER p, Team t
+    WHERE p.Team_name = t.name;
+
+    IF v_player_count >= 10 THEN
+        RAISE_APPLICATION_ERROR(-20002, 'A team cannot have more than 10 players.');
+    END IF;
+END;
+/
+
+
+
+
+
