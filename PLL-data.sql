@@ -1,3 +1,4 @@
+/*Create Teams*/
 INSERT INTO team VALUES ('Waterdogs', 'Philidelphia', 'Bill Tierney', 0, 0);
 INSERT INTO team VALUES ('Cannons', 'Boston', 'Brian Holman', 0, 0);
 INSERT INTO team VALUES ('Whipsnakes', 'Maryland','	Jim Stagnitta', 0, 0);
@@ -6,6 +7,35 @@ INSERT INTO team VALUES ('Redwoods', 'California', 'Nat St. Laurent', 0, 0);
 INSERT INTO team VALUES ('Chaos', 'Carolina', 'Andy Towers', 0, 0);
 INSERT INTO team VALUES ('Outlaws', 'Denver', 'Tim Soudan', 0, 0);
 INSERT INTO team VALUES ('Archers', 'Utah', 'Chris Bates', 0, 0);
+
+
+/*Create sponsor companies*/
+INSERT INTO Sponsor_Company  VALUES ('Ticketmaster');
+INSERT INTO Sponsor_Company  VALUES ('Gatorade');
+INSERT INTO Sponsor_Company  VALUES ('Progressive');
+INSERT INTO Sponsor_Company  VALUES ('Vineyard Vines');
+INSERT INTO Sponsor_Company  VALUES ('adidas');
+INSERT INTO Sponsor_Company  VALUES ('HEX Performance');
+INSERT INTO Sponsor_Company  VALUES ('Champion');
+INSERT INTO Sponsor_Company  VALUES ('Capital One');
+INSERT INTO Sponsor_Company  VALUES ('Nike');
+INSERT INTO Sponsor_Company  VALUES ('Coca-Cola');
+INSERT INTO Sponsor_Company  VALUES ('Verizon');
+
+/*set up sponsors between teams and companies*/
+INSERT INTO Sponsors  VALUES ('Waterdogs', 'Gatorade', 3);
+INSERT INTO Sponsors  VALUES ('Cannons', 'Nike', 2);
+INSERT INTO Sponsors  VALUES ('Whipsnakes', 'Coca-Cola', 5);
+INSERT INTO Sponsors  VALUES ('Waterdogs', 'Verizon', 4);
+
+
+/* Gear Companies*/
+INSERT INTO Gear_Company VALUES ('STX');
+INSERT INTO Gear_Company VALUES ('Cascade');
+INSERT INTO Gear_Company VALUES ('Maverick');
+INSERT INTO Gear_Company VALUES ('Warrior');
+INSERT INTO Gear_Company VALUES ('Brine');
+
 
 /* Waterdogs Starters */
 INSERT INTO player VALUES (1, 'Kieran McArdle', 'Waterdogs', 6, 'Attack', 20, 12, 52500, 'STX');
