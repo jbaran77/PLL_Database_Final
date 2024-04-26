@@ -1,4 +1,3 @@
-/*
 DROP TABLE TEAM Cascade Constraints;
 
 DROP TABLE PLAYER Cascade Constraints;
@@ -8,7 +7,7 @@ DROP TABLE SPONSORS;
 DROP TABLE GEAR_COMPANY;
 
 DROP TABLE SPONSOR_COMPANY;
-*/
+
 
 CREATE TABLE Team (
     name varchar2(40) ,
@@ -22,7 +21,6 @@ CREATE TABLE Team (
 
 CREATE TABLE Sponsor_Company (
     Name VARCHAR2(40),
-    Years_on_Deal number,
     PRIMARY KEY (name)
 );
 
@@ -30,6 +28,7 @@ CREATE TABLE Sponsor_Company (
 CREATE TABLE Sponsors (
     Team_Name VARCHAR2(40),
     Sponsor_Name VARCHAR2(40),
+    years_on_deal number,
     PRIMARY KEY (Team_Name, Sponsor_Name),
     FOREIGN KEY (Team_Name) REFERENCES Team(Name)
 );
@@ -38,9 +37,10 @@ CREATE TABLE Sponsors (
 
 CREATE TABLE Gear_Company (
     Name VARCHAR(40),
-    Years_on_Deal number,
     PRIMARY KEY (name)
 );
+
+
 
 
 CREATE TABLE Player (
@@ -62,42 +62,42 @@ CREATE TABLE Player (
 ALTER TABLE PLAYER
     Add Constraint salary_min Check ( salary >= 25000 );
 
-
-CREATE OR REPLACE TRIGGER check_salary_cap
+CREATE OR REPLACE TRIGGER check_player_count
 BEFORE INSERT OR UPDATE ON Player
 FOR EACH ROW
 DECLARE
-    check_salary_cap NUMBER;
+    team_player_count NUMBER;
 BEGIN
-    SELECT SUM(p.salary)
-    INTO check_salary_cap
-    FROM PLAYER p, Team t
-    WHERE p.Team_name = t.name;
+    SELECT COUNT(*) INTO team_player_count
+    FROM Player
+    WHERE Team_Name = :NEW.Team_Name;
 
-    IF check_salary_cap >= 735000 THEN
-        RAISE_APPLICATION_ERROR(-20001, 'Team cannot go over salary cap.');
+    IF team_player_count >= 10 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Cannot add more than 10 players to a team.');
     END IF;
 END;
 /
 
 
-CREATE OR REPLACE TRIGGER check_player_count
-BEFORE INSERT OR UPDATE ON PLAYER
+CREATE OR REPLACE TRIGGER check_unique_jersey_number
+BEFORE INSERT OR UPDATE ON Player
 FOR EACH ROW
 DECLARE
-    v_player_count NUMBER;
+    jersey_count NUMBER;
 BEGIN
+    -- Count the occurrences of the jersey number for the team
     SELECT COUNT(*)
-    INTO v_player_count
-    FROM PLAYER p, Team t
-    WHERE p.Team_name = t.name;
+    INTO jersey_count
+    FROM Player
+    WHERE Team_Name = :NEW.Team_Name
+    AND Jersey_number = :NEW.Jersey_number;
 
-    IF v_player_count >= 10 THEN
-        RAISE_APPLICATION_ERROR(-20002, 'A team cannot have more than 10 players.');
+    -- If jersey_count is greater than 0, raise an error
+    IF jersey_count > 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Jersey number must be unique within the team.');
     END IF;
 END;
 /
-
 
 
 
