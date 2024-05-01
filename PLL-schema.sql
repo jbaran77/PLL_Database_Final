@@ -53,6 +53,7 @@ CREATE TABLE Player (
     Assists number,
     Salary decimal(10, 2),
     Gear_Name VARCHAR2(40),
+    PRIMARY KEY (Player_ID),
     FOREIGN KEY (Team_Name) REFERENCES Team(Name),
     FOREIGN KEY (Gear_Name) REFERENCES GEAR_COMPANY(Name)
 );
